@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Testers - Roblox</title>
+    <link rel="icon" type="image/png" href="PaginaLogo.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <noscript>
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <div style="background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; max-width: 600px; margin: 20px;">
+                <div style="font-size: 80px; margin-bottom: 20px;">⚠️</div>
+                <h1 style="color: #2d3748; font-size: 32px; margin-bottom: 20px;">JavaScript Requerido</h1>
+                <p style="color: #4a5568; font-size: 18px; line-height: 1.6; margin-bottom: 15px;">
+                    Esta aplicación requiere <strong>JavaScript</strong> para funcionar correctamente.
+                </p>
+                <p style="color: #718096; font-size: 16px; line-height: 1.5; margin-bottom: 30px;">
+                    Por favor, activa JavaScript en tu navegador y recarga la página para acceder al sistema de Beta Testers.
+                </p>
+                <a href="https://www.enable-javascript.com/es/" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 40px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; transition: transform 0.2s;">
+                    📖 Cómo activar JavaScript
+                </a>
+                <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #e2e8f0;">
+                    <p style="color: #a0aec0; font-size: 14px; margin: 0;">
+                        <strong>Nota:</strong> Menos del 1% de usuarios tienen JavaScript desactivado. Si lo activaste y aún ves este mensaje, recarga la página.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </noscript>
+
+    <div class="container hidden" id="initialSetupContainer">
+        <div class="login-box">
+            <h1>Configuración Inicial</h1>
+            <p class="subtitle">Crea tu cuenta de administrador</p>
+            <form id="initialSetupForm">
+                <div class="input-group">
+                    <label for="setupUsername">Nombre de Usuario</label>
+                    <input type="text" id="setupUsername" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="setupPassword">Contraseña (4-6 dígitos)</label>
+                    <input type="password" id="setupPassword" required maxlength="6" pattern="\d{4,6}">
+                </div>
+                <div class="input-group">
+                    <label for="setupPasswordConfirm">Confirmar Contraseña</label>
+                    <input type="password" id="setupPasswordConfirm" required maxlength="6" pattern="\d{4,6}">
+                </div>
+                <div class="input-group">
+                    <label for="setupRoblox">Nombre de Roblox</label>
+                    <input type="text" id="setupRoblox" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Crear Cuenta Admin</button>
+                <div id="setupError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="loginContainer">
+        <div class="login-box">
+            <h1>Beta Testers</h1>
+            <p class="subtitle">Acceso exclusivo</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+            <button class="btn btn-secondary" id="showRequestAccountBtn" style="margin-top: 15px; width: 100%;">Solicitar Cuenta</button>
+            <button class="btn btn-secondary" id="showPublicLogsBtn" style="margin-top: 10px; width: 100%;">Ver Logs de Cuentas</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="publicLogsContainer">
+        <div class="login-box" style="max-width: 800px;">
+            <h1>Logs de Cuentas</h1>
+            <p class="subtitle">Revisa el estado de tu solicitud</p>
+            <div class="logs-section">
+                <div class="logs-list" id="publicLogsList"></div>
+            </div>
+            <button class="btn btn-secondary" id="backToLoginFromLogs" style="margin-top: 20px; width: 100%;">Volver al Login</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="requestAccountContainer">
+        <div class="login-box">
+            <h1>Solicitar Cuenta de Beta Tester</h1>
+            <p class="subtitle">Completa el formulario para solicitar acceso</p>
+            <form id="requestAccountForm">
+                <div class="input-group">
+                    <label for="requestUsername">Nombre de Usuario</label>
+                    <input type="text" id="requestUsername" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="requestPassword">Contraseña Deseada (4 dígitos)</label>
+                    <input type="password" id="requestPassword" required maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="input-group">
+                    <label for="requestRoblox">Nombre de Roblox</label>
+                    <input type="text" id="requestRoblox" required>
+                </div>
+                <div class="input-group">
+                    <label for="requestReason">¿Por qué quieres ser beta tester?</label>
+                    <textarea id="requestReason" rows="4" required placeholder="Explica tu motivación..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                <button type="button" class="btn btn-secondary" id="backToLogin">Volver al Login</button>
+                <div id="requestError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container hidden" id="adminPanel">
+        <div class="header">
+            <h1>Panel de Administración</h1>
+            <div class="user-header-info">
+                <div class="user-avatar" id="adminAvatar"></div>
+                <span class="user-header-name" id="adminHeaderName"></span>
+                <button class="btn-icon" id="changePasswordBtnAdmin" title="Cambiar Contraseña">🔑</button>
+                <button class="btn-icon" id="logoutBtn" title="Cerrar Sesión">🚪</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboardTab">Dashboard</button>
+            <button class="tab-btn" data-tab="gameTab">Estado del Juego</button>
+            <button class="tab-btn" data-tab="announcementsTab">Notificaciones</button>
+            <button class="tab-btn" data-tab="accountsTab">Cuentas</button>
+            <button class="tab-btn" data-tab="requestsTab">Solicitudes</button>
+            <button class="tab-btn" data-tab="bugsAdminTab">Bugs</button>
+            <button class="tab-btn" data-tab="suggestionsAdminTab">Sugerencias</button>
+            <button class="tab-btn" data-tab="logsTab">Logs</button>
+        </div>
+
+        <div class="tab-content active" id="dashboardTab">
+            <div class="dashboard-section">
+                <h2>Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Usuarios Totales</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🐛</div>
+                        <div class="stat-info">
+                            <h3 id="totalBugs">0</h3>
+                            <p>Bugs Reportados</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💡</div>
+                        <div class="stat-info">
+                            <h3 id="totalSuggestions">0</h3>
+                            <p>Sugerencias</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-activity">
+                    <h3>Actividad Reciente</h3>
+                    <div id="recentActivityList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="gameTab">
+            <div class="game-status-control">
+                <h2>Estado del Juego</h2>
+                <div class="status-controls">
+                    <label>
+                        <input type="checkbox" id="gameAvailable">
+                        Juego Disponible
+                    </label>
+                    <div class="input-group">
+                        <label for="gameLink">Enlace del Juego</label>
+                        <input type="url" id="gameLink" placeholder="https://www.roblox.com/games/...">
+                    </div>
+                    <button class="btn btn-primary" id="saveGameStatus">Guardar Estado</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="announcementsTab">
+            <div class="notifications-section">
+                <h2>Enviar Notificaciones</h2>
+                <div class="notification-form">
+                    <div class="input-group">
+                        <label for="notifRecipient">Destinatario</label>
+                        <select id="notifRecipient">
+                            <option value="all">Todos los usuarios</option>
+                            <option value="specific">Usuario específico</option>
+                        </select>
+                    </div>
+                    <div class="input-group hidden" id="specificUserGroup">
+                        <label for="specificUser">Seleccionar Usuario</label>
+                        <select id="specificUser"></select>
+                    </div>
+                    <div class="input-group">
+                        <label for="notifType">Tipo</label>
+                        <select id="notifType">
+                            <option value="info">📌 Información</option>
+                            <option value="warning">⚠️ Advertencia</option>
+                            <option value="success">✅ Éxito</option>
+                            <option value="urgent">🔴 Urgente</option>
+                        </select>
+                    </div>
+                    <input type="text" id="notifTitle" placeholder="Título de la notificación" class="input-full">
+                    <textarea id="notifMessage" placeholder="Mensaje..." rows="3"></textarea>
+                    <button class="btn btn-primary" id="sendNotification">Enviar Notificación</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="accountsTab">
+            <div class="accounts-section">
+                <h2>Gestión de Cuentas</h2>
+                <button class="btn btn-success" id="showCreateAccount">Crear Nueva Cuenta</button>
+
+                <div class="create-account-form hidden" id="createAccountForm">
+                    <h3>Nueva Cuenta</h3>
+                    <div class="input-group">
+                        <label for="newUsername">Nombre de Usuario</label>
+                        <input type="text" id="newUsername" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newRobloxName">Nombre de Roblox</label>
+                        <input type="text" id="newRobloxName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newRole">Rol</label>
+                        <select id="newRole">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="createAccountBtn">Crear Cuenta</button>
+                    <button class="btn btn-secondary" id="cancelCreateBtn">Cancelar</button>
+                </div>
+
+                <div class="accounts-list" id="accountsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="requestsTab">
+            <div class="requests-section">
+                <h2>Solicitudes de Cuenta</h2>
+                <div class="requests-pending">
+                    <h3>Solicitudes Pendientes</h3>
+                    <div id="pendingRequestsList"></div>
+                </div>
+                <div class="requests-history">
+                    <h3>Últimas Cuentas Aceptadas</h3>
+                    <div id="acceptedRequestsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="bugsAdminTab">
+            <div class="bugs-section">
+                <h2>Bugs Reportados</h2>
+                <div id="adminBugsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="suggestionsAdminTab">
+            <div class="suggestions-section">
+                <h2>Sugerencias Enviadas</h2>
+                <div id="adminSuggestionsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="logsTab">
+            <div class="logs-section">
+                <h2>Registro de Actividad</h2>
+                <div class="logs-filters">
+                    <select id="logFilter">
+                        <option value="all">Todas las actividades</option>
+                        <option value="login">Inicios de sesión</option>
+                        <option value="account">Gestión de cuentas</option>
+                        <option value="game">Estado del juego</option>
+                    </select>
+                    <button class="btn btn-secondary" id="clearLogs">Limpiar Logs</button>
+                </div>
+                <div class="logs-list" id="logsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="userPanel">
+        <div class="header">
+            <h1>Panel de Usuario</h1>
+            <div class="user-header-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <span class="user-header-name" id="userHeaderName"></span>
+                <button class="btn-icon" id="changePasswordBtnUser2" title="Cambiar Contraseña">🔑</button>
+                <button class="btn-icon" id="logoutBtnUser" title="Cerrar Sesión">🚪</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="userGameTab">Estado del Juego</button>
+            <button class="tab-btn" data-tab="bugsTab">Reportar Bugs</button>
+            <button class="tab-btn" data-tab="suggestionsTab">Sugerencias</button>
+            <button class="tab-btn" data-tab="userNotificationsTab">Notificaciones</button>
+            <button class="tab-btn" data-tab="userProfileTab">Mi Perfil</button>
+        </div>
+
+        <div class="tab-content active" id="userGameTab">
+            <div class="game-status-display" id="gameStatusDisplay">
+                <h2>Estado del Juego</h2>
+                <div id="gameStatusInfo"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="bugsTab">
+            <div class="bugs-section">
+                <h2>Reportar Bug</h2>
+                <div class="bug-form">
+                    <div class="input-group">
+                        <label for="bugSeverity">Severidad</label>
+                        <select id="bugSeverity">
+                            <option value="low">🟢 Baja</option>
+                            <option value="medium">🟡 Media</option>
+                            <option value="high">🟠 Alta</option>
+                            <option value="critical">🔴 Crítica</option>
+                        </select>
+                    </div>
+                    <input type="text" id="bugTitle" placeholder="Título del bug" class="input-full">
+                    <textarea id="bugDescription" placeholder="Describe el bug con el mayor detalle posible..." rows="4"></textarea>
+                    <input type="text" id="bugSteps" placeholder="Pasos para reproducir" class="input-full">
+                    <button class="btn btn-primary" id="submitBug">Reportar Bug</button>
+                </div>
+                <div class="my-bugs">
+                    <h3>Mis Reportes</h3>
+                    <div id="myBugsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="suggestionsTab">
+            <div class="suggestions-section">
+                <h2>Enviar Sugerencia</h2>
+                <div class="suggestion-form">
+                    <div class="input-group">
+                        <label for="suggestionCategory">Categoría</label>
+                        <select id="suggestionCategory">
+                            <option value="gameplay">🎮 Gameplay</option>
+                            <option value="ui">🎨 Interfaz</option>
+                            <option value="feature">✨ Nueva Función</option>
+                            <option value="balance">⚖️ Balance</option>
+                            <option value="other">📝 Otro</option>
+                        </select>
+                    </div>
+                    <input type="text" id="suggestionTitle" placeholder="Título de la sugerencia" class="input-full">
+                    <textarea id="suggestionDescription" placeholder="Describe tu sugerencia..." rows="4"></textarea>
+                    <button class="btn btn-primary" id="submitSuggestion">Enviar Sugerencia</button>
+                </div>
+                <div class="my-suggestions">
+                    <h3>Mis Sugerencias</h3>
+                    <div id="mySuggestionsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="userNotificationsTab">
+            <div class="user-notifications-section">
+                <h2>Mis Notificaciones</h2>
+                <div class="notifications-controls">
+                    <button class="btn btn-secondary" id="markAllRead">Marcar todas como leídas</button>
+                    <button class="btn btn-secondary" id="clearNotifications">Limpiar todo</button>
+                </div>
+                <div id="userNotificationsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="userProfileTab">
+            <div class="profile-section">
+                <h2>Mi Perfil</h2>
+                <div class="profile-info">
+                    <p><strong>Usuario:</strong> <span id="profileUsername"></span></p>
+                    <p><strong>Cuenta de Roblox:</strong> <span id="profileRoblox"></span></p>
+                    <div class="input-group">
+                        <label for="discordName">Vincular Discord</label>
+                        <input type="text" id="discordName" placeholder="Usuario#1234">
+                        <button class="btn btn-primary" id="saveDiscord">Guardar Discord</button>
+                    </div>
+                    <p id="discordStatus"></p>
+                    <button class="btn btn-primary" id="changePasswordBtnUser" style="margin-top: 15px;">Cambiar Contraseña</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="editModal">
+        <div class="modal-content">
+            <h3>Editar Cuenta</h3>
+            <div class="input-group">
+                <label for="editUsername">Nombre de Usuario</label>
+                <input type="text" id="editUsername" readonly>
+            </div>
+            <div class="input-group">
+                <label for="editPassword">Nueva Contraseña (4-6 dígitos)</label>
+                <input type="text" id="editPassword" maxlength="6" pattern="\d{4,6}">
+            </div>
+            <div class="input-group">
+                <label for="editRobloxName">Nombre de Roblox</label>
+                <input type="text" id="editRobloxName">
+            </div>
+            <div class="input-group">
+                <label for="editRole">Rol</label>
+                <select id="editRole">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" id="saveEditBtn">Guardar Cambios</button>
+            <button class="btn btn-danger" id="deleteAccountBtn">Eliminar Cuenta</button>
+            <button class="btn btn-secondary" id="cancelEditBtn">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="changePasswordModal">
+        <div class="modal-content">
+            <h3>Cambiar Contraseña</h3>
+            <div class="input-group">
+                <label for="currentPassword">Contraseña Actual</label>
+                <input type="password" id="currentPassword" maxlength="6" placeholder="****">
+            </div>
+            <div class="input-group">
+                <label for="newPasswordChange">Nueva Contraseña (4-6 dígitos)</label>
+                <input type="text" id="newPasswordChange" maxlength="6" placeholder="1234">
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                <input type="text" id="confirmPassword" maxlength="6" placeholder="1234">
+            </div>
+            <div id="changePasswordError" class="error-message"></div>
+            <button class="btn btn-primary" id="saveNewPassword">Guardar Nueva Contraseña</button>
+            <button class="btn btn-secondary" id="cancelChangePassword">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="loader hidden" id="globalLoader">
+        <div class="loader-spinner"></div>
+        <p id="loaderText">Cargando...</p>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Main Script -->
+    <script src="script.js"></script>
+</body>
+</html>
